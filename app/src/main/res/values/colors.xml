@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- CustomWebApp: Define application colors -->
+<resources>
+    <!-- colorPrimaryDark is used for the status bar -->
+    <color name="colorPrimaryDark">#410453</color>
+
+    <!-- colorAccent is used as the default value for colorControlActivated which is used to tint widgets -->
+    <color name="colorAccent">#64187b</color>
+
+    <color name="splashScreenBackgroundColor">#ffffff</color>
+
+    <color name="menu_labels_colorNormal">#7b41a9</color>
+    <color name="menu_labels_colorPressed">#592e7a</color>
+    <color name="menu_labels_textColor">#ffffff</color>
+</resources>

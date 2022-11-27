@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- CustomWebApp: Define application name-related strings -->
+    <string name="app_name">CustomWebApp</string>
+    <string name="app_name_short">CustomWebApp</string>
+    <string name="app_user_agent">CustomWebApp</string>
+    <string name="default_email_subject">"CustomWebApp"</string>
+
+    <!-- CustomWebApp: Define app environment URLs
+         These should be updated in 'AndroidManifest.xml -> intent-filter -> data android:host' as well -->
+    <string name="prod_domain">github.com</string>
+
+    <string name="connection_error_title">Error</string>
+    <string name="connection_error_message">The Internet connection appears to be offline. Swipe down to retry.</string>
+
+    <string name="storage_permission_granted">Storage permission granted, you may now download.</string>
+    <string name="storage_permission_denied">File cannot be downloaded unless Storage permission is granted.</string>
+    <string name="downloading_file">Downloading file</string>
+</resources>

@@ -1,0 +1,46 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.diffplug.spotless'
+
+android {
+    compileSdkVersion 33
+
+    defaultConfig {
+        // CustomWebApp: modify applicationId to match your application
+        applicationId "br.net.du.customwebapp"
+        minSdkVersion 14
+        targetSdkVersion 33
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.github.clans:fab:1.6.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testImplementation 'org.mockito:mockito-inline:4.6.1'
+}
+
+configurations.implementation {
+    spotless {
+        java {
+            // Ref.: https://github.com/diffplug/spotless/issues/240#issuecomment-385206606
+            custom 'noWildcardImports', {
+                if (it.contains('*;\n')) {
+                    throw new Error('No wildcard imports allowed')
+                }
+            }
+            bumpThisNumberIfACustomStepChanges(1)
+
+            googleJavaFormat().aosp()
+            target '**/*.java'
+        }
+    }
+    preBuild.dependsOn(spotlessApply)
+}
