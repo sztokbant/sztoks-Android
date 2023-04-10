@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -18,7 +19,8 @@ import org.mockito.MockitoAnnotations;
 
 public class AppUrlsTest {
     private static final String CURRENT_DOMAIN_KEY = "currentDomain";
-
+    private static final String CURRENT_SNAPSHOT_ID_KEY = "currentSnapshotId";
+    private static final String LATEST_SNAPSHOT_ID_VALUE = "0";
     private static final String PACKAGE_NAME = "package.name";
     private static final String PROD_DOMAIN = "prod.domain";
     private static final String OTHER_DOMAIN = "other.domain";
@@ -35,6 +37,13 @@ public class AppUrlsTest {
     private static final String GENERIC_URL = "https://" + GENERIC_DOMAIN;
 
     private static final String EXTERNAL_URL = "https://www.amazon.com";
+
+    private static final String SNAPSHOT_ID =
+            String.format("%d", Math.abs(new Random().nextInt()) % 10000);
+    private static final String SNAPSHOT_URL_PATH = "/snapshot/";
+    private static final String SNAPSHOT_PAGE = PROD_URL + SNAPSHOT_URL_PATH + SNAPSHOT_ID;
+    private static final String SNAPSHOT_RELATED_PAGE =
+            PROD_URL + SNAPSHOT_URL_PATH + SNAPSHOT_ID + "/somePath";
 
     @Mock private Context context;
 
@@ -166,14 +175,16 @@ public class AppUrlsTest {
     }
 
     @Test
-    public void appStart_defaultToProdDomain() {
+    public void appStart_defaultToProdDomainLatestSnapshotId() {
         // WHEN
         final String currentDomain = appUrls.getCurrentDomain();
 
         // THEN
         assertEquals(PROD_DOMAIN, currentDomain);
         verify(editor, times(1)).putString(eq(CURRENT_DOMAIN_KEY), eq(PROD_DOMAIN));
-        verify(editor, times(1)).apply();
+        verify(editor, times(1))
+                .putString(eq(CURRENT_SNAPSHOT_ID_KEY), eq(LATEST_SNAPSHOT_ID_VALUE));
+        verify(editor, times(2)).apply();
     }
 
     @Test
@@ -184,7 +195,9 @@ public class AppUrlsTest {
         // THEN
         assertEquals(PROD_URL, currentUrl);
         verify(editor, times(1)).putString(eq(CURRENT_DOMAIN_KEY), eq(PROD_DOMAIN));
-        verify(editor, times(1)).apply();
+        verify(editor, times(1))
+                .putString(eq(CURRENT_SNAPSHOT_ID_KEY), eq(LATEST_SNAPSHOT_ID_VALUE));
+        verify(editor, times(2)).apply();
     }
 
     @Test
@@ -201,7 +214,9 @@ public class AppUrlsTest {
 
         verify(editor, times(1)).putString(eq(CURRENT_DOMAIN_KEY), eq(PROD_DOMAIN));
         verify(editor, times(1)).putString(eq(CURRENT_DOMAIN_KEY), eq(GENERIC_DOMAIN));
-        verify(editor, times(2)).apply();
+        verify(editor, times(1))
+                .putString(eq(CURRENT_SNAPSHOT_ID_KEY), eq(LATEST_SNAPSHOT_ID_VALUE));
+        verify(editor, times(3)).apply();
     }
 
     @Test
@@ -222,5 +237,41 @@ public class AppUrlsTest {
     @Test
     public void isDownloadable_invalidDomainHtmlFile_returnFalse() {
         assertFalse(appUrls.isDownloadable(EXTERNAL_URL + "/export_data_download.html"));
+    }
+
+    @Test
+    public void setCurrentSnapshotIdFromUrl_null_latest() {
+        // WHEN
+        appUrls.setCurrentSnapshotIdFromUrl(null);
+
+        // THEN
+        assertEquals(LATEST_SNAPSHOT_ID_VALUE, appUrls.getCurrentSnapshotId());
+    }
+
+    @Test
+    public void setCurrentSnapshotIdFromUrl_notPresent_latest() {
+        // WHEN
+        appUrls.setCurrentSnapshotIdFromUrl(PROD_URL);
+
+        // THEN
+        assertEquals(LATEST_SNAPSHOT_ID_VALUE, appUrls.getCurrentSnapshotId());
+    }
+
+    @Test
+    public void setCurrentSnapshotIdFromUrl_snapshotPage_happy() {
+        // WHEN
+        appUrls.setCurrentSnapshotIdFromUrl(SNAPSHOT_PAGE);
+
+        // THEN
+        assertEquals(SNAPSHOT_ID, appUrls.getCurrentSnapshotId());
+    }
+
+    @Test
+    public void setCurrentSnapshotIdFromUrl_snapshotRelatedPage_happy() {
+        // WHEN
+        appUrls.setCurrentSnapshotIdFromUrl(SNAPSHOT_RELATED_PAGE);
+
+        // THEN
+        assertEquals(SNAPSHOT_ID, appUrls.getCurrentSnapshotId());
     }
 }

@@ -38,7 +38,7 @@ public class FloatingActionMenuManager {
     public void refresh() {
         final String webViewUrl = webView.getUrl();
 
-        if (!appUrls.isCurrentDomain(webViewUrl)) {
+        if (!appUrls.isCurrentDomain(webViewUrl) || !appUrls.isCurrentSnapshotId(webViewUrl)) {
             repopulate(webViewUrl);
         }
 
@@ -64,6 +64,8 @@ public class FloatingActionMenuManager {
         } catch (final MalformedURLException e) {
             // ignore
         }
+
+        appUrls.setCurrentSnapshotIdFromUrl(webViewUrl);
 
         baseUrl = appUrls.getCurrentUrl();
 
@@ -91,7 +93,12 @@ public class FloatingActionMenuManager {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(final View view) {
-                        webView.loadUrl(baseUrl + "/" + buttonConfig.getPath());
+                        webView.loadUrl(
+                                baseUrl
+                                        + "/"
+                                        + String.format(
+                                                buttonConfig.getPath(),
+                                                appUrls.getCurrentSnapshotId()));
                         closeMenu();
                     }
                 });

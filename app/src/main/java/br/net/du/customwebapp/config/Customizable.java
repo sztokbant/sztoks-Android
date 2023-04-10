@@ -7,9 +7,18 @@ public class Customizable {
     // Define buttons in floating action menu and their paths
     public static final ButtonConfig[] BUTTON_CONFIGS = {
         new ButtonConfig(
-                "CustomWebApp",
+                "+ Donation Transaction",
                 R.drawable.ic_launcher,
-                "https://github.com/sztokbant/CustomWebApp-Android")
+                "snapshot/%s/newDonationTransaction"),
+        new ButtonConfig(
+                "+ Investing Activity Transaction",
+                R.drawable.ic_launcher,
+                "snapshot/%s/newInvestmentTransaction"),
+        new ButtonConfig(
+                "+ Income Transaction", R.drawable.ic_launcher, "snapshot/%s/newIncomeTransaction"),
+        new ButtonConfig(
+                "+ Liability Account", R.drawable.ic_launcher, "snapshot/%s/newLiabilityAccount"),
+        new ButtonConfig("+ Asset Account", R.drawable.ic_launcher, "snapshot/%s/newAssetAccount")
     };
 
     // Define other domains allowed in the app's webview
