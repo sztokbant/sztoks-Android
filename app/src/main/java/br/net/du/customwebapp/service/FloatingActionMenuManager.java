@@ -32,14 +32,14 @@ public class FloatingActionMenuManager {
         this.webView = webView;
         this.appUrls = appUrls;
 
-        populateWithCurrentDomain(webView.getUrl());
+        repopulate(webView.getUrl());
     }
 
     public void refresh() {
         final String webViewUrl = webView.getUrl();
 
         if (!appUrls.isCurrentDomain(webViewUrl)) {
-            populateWithCurrentDomain(webViewUrl);
+            repopulate(webViewUrl);
         }
 
         if (appUrls.isSignedOutUrl(webViewUrl)) {
@@ -53,9 +53,11 @@ public class FloatingActionMenuManager {
         floatingActionMenu.close(false);
     }
 
-    private void populateWithCurrentDomain(final String webViewUrl) {
+    private void repopulate(final String webViewUrl) {
         try {
-            final String webViewHost = new URL(webViewUrl).getHost();
+            final URL url = new URL(webViewUrl);
+            final String webViewHost =
+                    url.getHost() + (url.getPort() > 0 ? ":" + url.getPort() : "");
             if (!appUrls.getCurrentDomain().equals(webViewHost)) {
                 appUrls.setCurrentDomain(webViewHost);
             }

@@ -166,7 +166,7 @@ public class AppUrlsTest {
     }
 
     @Test
-    public void getCurrentDomain_appStart_defaultToProdDomain() {
+    public void appStart_defaultToProdDomain() {
         // WHEN
         final String currentDomain = appUrls.getCurrentDomain();
 
