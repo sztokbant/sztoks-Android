@@ -5,8 +5,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        // CustomWebApp: modify applicationId to match your application
-        applicationId "br.net.du.customwebapp"
+        applicationId "br.net.du.sztoksandroid"
         minSdkVersion 14
         targetSdkVersion 33
     }
