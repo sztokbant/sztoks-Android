@@ -11,6 +11,11 @@
     <!-- ZIP file download -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
+    <!-- For local test:
+        - add android:usesCleartextTraffic="true"
+        - change @prod_domain to <IP>:<PORT>
+        - have AppUrls::getCurrentUrl return 'http://' instead of 'https://'
+    -->
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
